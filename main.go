@@ -22,6 +22,30 @@ type Recipe struct {
 	PublishedAt  time.Time `json:"publishedAt"`
 }
 
+func DeleteRecipeHandler(c *gin.Context) {
+	id := c.Param("recipe-id")
+	index := -1
+
+	for i := 0; i < len(recipes); i++ {
+		if recipes[i].Id == id {
+			index = i
+		}
+	}
+
+	if index == -1 {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Recipe not found",
+		})
+		return
+	}
+
+	recipes = append(recipes[:index], recipes[index+1:]...)
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Recipe deleted",
+	})
+}
+
 func UpdateRecipeHandler(c *gin.Context) {
 	id := c.Param("recipe-id")
 
@@ -80,5 +104,6 @@ func main() {
 	router.POST("/recipes", NewRecipeHandler)
 	router.GET("/recipes", ListRecipesHandler)
 	router.PUT("recipes/:recipe-id", UpdateRecipeHandler)
+	router.DELETE("recipes/:recipe-id", DeleteRecipeHandler)
 	router.Run()
 }
