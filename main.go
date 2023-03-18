@@ -80,16 +80,16 @@ func UpdateRecipeHandler(c *gin.Context) {
 
 // ListRecipesHandler lists all the available recipes in sorted order.
 func ListRecipesHandler(c *gin.Context) {
-	var recipes []*Recipe
+	var listOfRecipes []*Recipe
 	for _, recipe := range recipes {
-		recipes = append(recipes, recipe)
+		listOfRecipes = append(listOfRecipes, recipe)
 	}
 
-	sort.SliceStable(recipes, func(i, j int) bool {
-		return recipes[i].PublishedAt.After(recipes[i].PublishedAt)
+	sort.SliceStable(listOfRecipes, func(i, j int) bool {
+		return listOfRecipes[i].PublishedAt.After(listOfRecipes[i].PublishedAt)
 	})
 
-	c.JSON(http.StatusOK, recipes)
+	c.JSON(http.StatusOK, listOfRecipes)
 }
 
 // NewRecipeHandler creates a new recipe.
